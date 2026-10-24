@@ -18,20 +18,23 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      - name: Initialize Project & Build APK
+      - name: Build Web App APK with Native tools
         run: |
-          npm init -y
-          npm install cordova@12.0.0
-          npx cordova create myapp com.vibemeet.app VibeMeet
+          npm install -g cordova
+          cordova telemetry off
+          cordova create myapp com.vibemeet.app VibeMeet
           cd myapp
-          npx cordova platform add android@12.0.0 --nofetch
+          cordova platform add android
           cp ../index.html www/index.html
-          npx cordova build android --debug
+          cordova build android --debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
