@@ -23,25 +23,15 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install Cordova & Dependencies
+      - name: Initialize Project & Build APK
         run: |
-          npm install -g cordova
-          cordova telemetry off
-
-      - name: Create Cordova Project
-        run: |
-          cordova create myapp com.vibemeet.app VibeMeet
+          npm init -y
+          npm install cordova@12.0.0
+          npx cordova create myapp com.vibemeet.app VibeMeet
           cd myapp
-          cordova platform add android@12.0.0 --nofetch
-
-      - name: Copy Web Assets
-        run: |
-          cp index.html myapp/www/index.html
-
-      - name: Build Android Debug APK
-        run: |
-          cd myapp
-          cordova build android --debug
+          npx cordova platform add android@12.0.0 --nofetch
+          cp ../index.html www/index.html
+          npx cordova build android --debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
